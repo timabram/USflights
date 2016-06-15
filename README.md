@@ -8,4 +8,4 @@ Source: [TranStats, US Carriers Domestic Market, T-1000](http://www.transtats.bt
 _It's also cool to see the BTS using [Highcharts](http://www.highcharts.com/) for their [data viz](http://transtats.bts.gov/)_
 
 
-![](Flight_animation/gif)
+![](Flight_animation.gif)
