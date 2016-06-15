@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Tim Abram" />
+
+<meta name="date" content="2016-06-14" />
+
+<title>US Flight Data</title>
+
+<script src="index_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="index_files/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="index_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="index_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="index_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="index_files/htmlwidgets-0.6/htmlwidgets.js"></script>
+<script src="index_files/highcharts-4.2.3/highstock.js"></script>
+<script src="index_files/highcharts-4.2.3/highcharts-more.js"></script>
+<script src="index_files/highcharts-4.2.3/highcharts-3d.js"></script>
+<script src="index_files/highcharts-4.2.3/modules/exporting.js"></script>
+<script src="index_files/highcharts-4.2.3/modules/drilldown.js"></script>
+<script src="index_files/highcharts-4.2.3/modules/heatmap.js"></script>
+<script src="index_files/highcharts-4.2.3/modules/map.js"></script>
+<script src="index_files/highcharts-4.2.3/modules/treemap.js"></script>
+<script src="index_files/highcharts-4.2.3/modules/funnel.js"></script>
+<script src="index_files/highcharts-4.2.3/modules/solid-gauge.js"></script>
+<script src="index_files/highcharts-4.2.3/modules/reset.js"></script>
+<script src="index_files/highcharts-4.2.3/plugins/draggable-points.js"></script>
+<script src="index_files/highcharts-4.2.3/plugins/pattern-fill-v2.js"></script>
+<script src="index_files/highcharts-4.2.3/plugins/text-symbols.js"></script>
+<link href="index_files/fontawesome-4.5.0/font-awesome.min.css" rel="stylesheet" />
+<script src="index_files/highchart-binding-0.3.0/highchart.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="index_files/navigation-1.0/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">US Flight Data</h1>
+<h4 class="author"><em>Tim Abram</em></h4>
+<h4 class="date"><em>June 14, 2016</em></h4>
+
+</div>
+
+
+<p><em>Data visualization of unique air routes across the US from 1995-2015</em></p>
+<p>Inspired by the AirBNB visualization and <a href="https://medium.com/airbnb-engineering/using-r-packages-and-education-to-scale-data-science-at-airbnb-906faa58e12d#.czt4te24n">blog post</a> by <a href="https://github.com/ricardo-bion/medium_visualization">Ricardo Bion</a>, I incorporated data from the TranStats website with some R code to create a similar visualization. I was also interested in seeing how much more connected US cities have become in the last 20 years by means of air travel.</p>
+<p>Data Source: <a href="http://www.transtats.bts.gov/Tables.asp?DB_ID=110&amp;DB_Name=Air%20Carrier%20Statistics%20%28Form%2041%20Traffic%29-%20%20U.S.%20Carriers&amp;DB_Short_Name=Air%20Carriers">TranStats, US Carriers Domestic Market, T-1000</a>. Only service class “F” flights were included, defined as scheduled passenger/cargo service flights.<br />
+<em>It’s also cool to see the BTS using <a href="http://www.highcharts.com/">Highcharts</a> for their <a href="http://transtats.bts.gov/">data viz</a></em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Grab Data for Simple Plots:</span>
+year &lt;-<span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">1995</span>:<span class="dv">2015</span>))
+### Data Source: Transtats.bts.gov
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(year)){
+  flights &lt;-<span class="kw">read.csv</span>(<span class="kw">paste</span>(<span class="st">&quot;C:/users/tim/dropbox/bootstrap web design/Data Playground/Datasets/T1000 - Flights/4520972_T_T100D_MARKET_US_CARRIER_ONLY_&quot;</span>,year[i], <span class="st">&quot;.csv&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>),<span class="dt">as.is=</span>T)
+flights &lt;-flights[<span class="kw">which</span>(flights$CLASS==<span class="st">&quot;F&quot;</span>),]; flights&lt;-flights[,<span class="dv">1</span>:<span class="dv">6</span>]
+if(i ==<span class="st"> </span><span class="dv">1</span>){total_flights &lt;-<span class="st"> </span>flights}else{
+  total_flights &lt;-<span class="st"> </span><span class="kw">rbind</span>(total_flights, flights)
+}}</code></pre></div>
+<div id="passengers-per-year" class="section level1">
+<h1>Passengers Per Year</h1>
+<p>Line graph of total passengers over time (how has air travel increased over time?)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(highcharter)
+<span class="kw">require</span>(reshape2)
+
+total_flights &lt;-total_flights[<span class="kw">which</span>(total_flights$PASSENGERS!=<span class="dv">0</span>),]
+
+tf2 &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">dcast</span>(<span class="dt">data =</span> total_flights, .~YEAR, <span class="dt">value.var =</span> <span class="st">&quot;PASSENGERS&quot;</span>, <span class="dt">fun.aggregate =</span> sum)))
+tf2$YEAR &lt;-<span class="kw">rownames</span>(tf2); <span class="kw">colnames</span>(tf2) &lt;-<span class="kw">c</span>(<span class="st">&quot;PASSENGERS&quot;</span>, <span class="st">&quot;YEAR&quot;</span>); tf2&lt;-tf2[-<span class="dv">1</span>,]; <span class="kw">rownames</span>(tf2)&lt;-<span class="ot">NULL</span>
+tf2$PASSENGERS &lt;-<span class="kw">as.numeric</span>(<span class="kw">as.character</span>(tf2$PASSENGERS))
+
+<span class="kw">highchart</span>() %&gt;%
+<span class="st">  </span><span class="kw">hc_title</span>(<span class="dt">text =</span> <span class="st">&quot;Total Flight Passengers Over Time&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_subtitle</span>(<span class="dt">text =</span> <span class="st">&quot;Source: BTS.gov&quot;</span>) %&gt;%
+<span class="st">  </span><span class="co">#hc_tooltip(valueDecimals=2) %&gt;%</span>
+<span class="st">  </span><span class="kw">hc_add_series_labels_values</span>(tf2$YEAR, tf2$PASSENGERS, 
+                              <span class="dt">type=</span><span class="st">&quot;line&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_tooltip</span>(<span class="dt">pointFormat =</span> <span class="st">&quot;{point.y} passengers&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_xAxis</span>(<span class="dt">categories =</span> tf2$YEAR) %&gt;%
+<span class="st">  </span><span class="kw">hc_legend</span>(<span class="dt">enabled=</span>F) %&gt;%
+<span class="st">  </span><span class="kw">hc_add_theme</span>(<span class="kw">hc_theme_darkunica</span>())</code></pre></div>
+<div id="htmlwidget-3413" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3413">{"x":{"hc_opts":{"title":{"text":"Total Flight Passengers Over Time"},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0}},"subtitle":{"text":"Source: BTS.gov"},"series":[{"data":[{"name":"1995","y":492132128},{"name":"1996","y":522217851},{"name":"1997","y":538372895},{"name":"1998","y":551742964},{"name":"1999","y":573057237},{"name":"2000","y":599563678},{"name":"2001","y":559618055},{"name":"2002","y":551899643},{"name":"2003","y":583293762},{"name":"2004","y":629768486},{"name":"2005","y":657261487},{"name":"2006","y":658362617},{"name":"2007","y":679168758},{"name":"2008","y":651709940},{"name":"2009","y":618052278},{"name":"2010","y":629537424},{"name":"2011","y":638247232},{"name":"2012","y":642288387},{"name":"2013","y":645677274},{"name":"2014","y":662824549},{"name":"2015","y":696019536}],"type":"line"}],"tooltip":{"pointFormat":"{point.y} passengers"},"xAxis":{"categories":["1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015"]},"legend":{"enabled":false}},"theme":{"colors":["#2b908f","#90ee7e","#f45b5b","#7798BF","#aaeeee","#ff0066","#eeaaee","#55BF3B","#DF5353","#7798BF","#aaeeee"],"chart":{"backgroundColor":{"linearGradient":{"x1":0,"y1":0,"x2":1,"y2":1},"stops":[[0,"#2a2a2b"],[1,"#3e3e40"]]},"style":{"fontFamily":"Unica One, sans-serif"},"plotBorderColor":"#606063"},"title":{"style":{"color":"#E0E0E3","textTransform":"uppercase","fontSize":"20px"}},"subtitle":{"style":{"color":"#E0E0E3","textTransform":"uppercase"}},"xAxis":{"gridLineColor":"#707073","labels":{"style":{"color":"#E0E0E3"}},"lineColor":"#707073","minorGridLineColor":"#505053","tickColor":"#707073","title":{"style":{"color":"#A0A0A3"}}},"yAxis":{"gridLineColor":"#707073","labels":{"style":{"color":"#E0E0E3"}},"lineColor":"#707073","minorGridLineColor":"#505053","tickColor":"#707073","tickWidth":1,"title":{"style":{"color":"#A0A0A3"}}},"tooltip":{"backgroundColor":"rgba(0, 0, 0, 0.85)","style":{"color":"#F0F0F0"}},"plotOptions":{"series":{"dataLabels":{"color":"#B0B0B3"},"marker":{"lineColor":"#333"}},"boxplot":{"fillColor":"#505053"},"candlestick":{"lineColor":"white"},"errorbar":{"color":"white"}},"legend":{"itemStyle":{"color":"#E0E0E3"},"itemHoverStyle":{"color":"#FFF"},"itemHiddenStyle":{"color":"#606063"}},"credits":{"style":{"color":"#666"}},"labels":{"style":{"color":"#707073"}},"drilldown":{"activeAxisLabelStyle":{"color":"#F0F0F3"},"activeDataLabelStyle":{"color":"#F0F0F3"}},"navigation":{"buttonOptions":{"symbolStroke":"#DDDDDD","theme":{"fill":"#505053"}}},"rangeSelector":{"buttonTheme":{"fill":"#505053","stroke":"#000000","style":{"color":"#CCC"},"states":{"hover":{"fill":"#707073","stroke":"#000000","style":{"color":"white"}},"select":{"fill":"#000003","stroke":"#000000","style":{"color":"white"}}}},"inputBoxBorderColor":"#505053","inputStyle":{"backgroundColor":"#333","color":"silver"},"labelStyle":{"color":"silver"}},"navigator":{"handles":{"backgroundColor":"#666","borderColor":"#AAA"},"outlineColor":"#CCC","maskFill":"rgba(255,255,255,0.1)","series":{"color":"#7798BF","lineColor":"#A6C7ED"},"xAxis":{"gridLineColor":"#505053"}},"scrollbar":{"barBackgroundColor":"#808083","barBorderColor":"#808083","buttonArrowColor":"#CCC","buttonBackgroundColor":"#606063","buttonBorderColor":"#606063","rifleColor":"#FFF","trackBackgroundColor":"#404043","trackBorderColor":"#404043"},"legendBackgroundColor":"rgba(0, 0, 0, 0.5)","background2":"#505053","dataLabelsColor":"#B0B0B3","textColor":"#C0C0C0","contrastTextColor":"#F0F0F3","maskColor":"rgba(255,255,255,0.3)"},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":"Unica+One","debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="passengers-per-month-aggregate-by-year" class="section level1">
+<h1>Passengers Per Month (Aggregate by year)</h1>
+<p>Multi-line graph grouped by year for total passengers for each month (which months are the busiest for air travel?)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">total_flights$DATE &lt;-<span class="kw">as.factor</span>(<span class="kw">paste</span>(total_flights$YEAR, <span class="st">&quot;-&quot;</span>, total_flights$MONTH, <span class="st">&quot;-1&quot;</span>,  <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))
+tf &lt;-<span class="kw">dcast</span>(<span class="dt">data =</span> total_flights, MONTH ~<span class="st"> </span>YEAR, <span class="dt">value.var =</span> <span class="st">&quot;PASSENGERS&quot;</span>, <span class="dt">fun.aggregate =</span> sum)
+
+<span class="kw">highchart</span>() %&gt;%
+<span class="st">  </span><span class="kw">hc_title</span>(<span class="dt">text =</span> <span class="st">&quot;Total Flight Passengers Over Time&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_subtitle</span>(<span class="dt">text =</span> <span class="st">&quot;Source: BTS.gov&quot;</span>) %&gt;%
+<span class="st">  </span><span class="co">#hc_tooltip(valueDecimals=2) %&gt;%</span>
+<span class="st">  </span><span class="kw">hc_add_series_labels_values</span>(tf$MONTH,tf$<span class="st">`</span><span class="dt">1995</span><span class="st">`</span>, <span class="dt">name =</span> <span class="st">&quot;1995&quot;</span>,
+                              <span class="dt">type=</span><span class="st">&quot;line&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_add_series_labels_values</span>(tf$MONTH,tf$<span class="st">`</span><span class="dt">1998</span><span class="st">`</span>, <span class="dt">name =</span> <span class="st">&quot;1998&quot;</span>,
+                              <span class="dt">type=</span><span class="st">&quot;line&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_add_series_labels_values</span>(tf$MONTH,tf$<span class="st">`</span><span class="dt">2000</span><span class="st">`</span>, <span class="dt">name =</span> <span class="st">&quot;2000&quot;</span>,
+                              <span class="dt">type=</span><span class="st">&quot;line&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_add_series_labels_values</span>(tf$MONTH,tf$<span class="st">`</span><span class="dt">2002</span><span class="st">`</span>, <span class="dt">name =</span> <span class="st">&quot;2002&quot;</span>,
+                              <span class="dt">type=</span><span class="st">&quot;line&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_add_series_labels_values</span>(tf$MONTH,tf$<span class="st">`</span><span class="dt">2004</span><span class="st">`</span>, <span class="dt">name =</span> <span class="st">&quot;2004&quot;</span>,
+                              <span class="dt">type=</span><span class="st">&quot;line&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_add_series_labels_values</span>(tf$MONTH,tf$<span class="st">`</span><span class="dt">2006</span><span class="st">`</span>, <span class="dt">name =</span> <span class="st">&quot;2006&quot;</span>,
+                              <span class="dt">type=</span><span class="st">&quot;line&quot;</span>) %&gt;%
+<span class="st">   </span><span class="kw">hc_add_series_labels_values</span>(tf$MONTH,tf$<span class="st">`</span><span class="dt">2015</span><span class="st">`</span>, <span class="dt">name =</span> <span class="st">&quot;2015&quot;</span>,
+                              <span class="dt">type=</span><span class="st">&quot;line&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_tooltip</span>(<span class="dt">pointFormat =</span> <span class="st">&quot;{point.y} passengers&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_xAxis</span>(<span class="dt">categories =</span> <span class="kw">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, 
+                          <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">hc_legend</span>(<span class="dt">enabled=</span>T) %&gt;%
+<span class="st">  </span><span class="kw">hc_add_theme</span>(<span class="kw">hc_theme_darkunica</span>())</code></pre></div>
+<div id="htmlwidget-3500" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3500">{"x":{"hc_opts":{"title":{"text":"Total Flight Passengers Over Time"},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0}},"subtitle":{"text":"Source: BTS.gov"},"series":[{"data":[{"name":1,"y":36617570},{"name":2,"y":35066436},{"name":3,"y":42618952},{"name":4,"y":40947382},{"name":5,"y":41419727},{"name":6,"y":43599425},{"name":7,"y":44388119},{"name":8,"y":45742939},{"name":9,"y":38602877},{"name":10,"y":41966453},{"name":11,"y":40491971},{"name":12,"y":40670277}],"name":"1995","type":"line"},{"data":[{"name":1,"y":39860031},{"name":2,"y":39353363},{"name":3,"y":47832248},{"name":4,"y":46867248},{"name":5,"y":47315881},{"name":6,"y":49105243},{"name":7,"y":51376436},{"name":8,"y":50359262},{"name":9,"y":42426380},{"name":10,"y":46896614},{"name":11,"y":44736927},{"name":12,"y":45613331}],"name":"1998","type":"line"},{"data":[{"name":1,"y":41539852},{"name":2,"y":43713708},{"name":3,"y":52976866},{"name":4,"y":50344174},{"name":5,"y":52309118},{"name":6,"y":54673126},{"name":7,"y":55567742},{"name":8,"y":54473720},{"name":9,"y":46362769},{"name":10,"y":50920081},{"name":11,"y":49631713},{"name":12,"y":47050809}],"name":"2000","type":"line"},{"data":[{"name":1,"y":38499158},{"name":2,"y":38561272},{"name":3,"y":48397323},{"name":4,"y":45358119},{"name":5,"y":47049797},{"name":6,"y":49095372},{"name":7,"y":51065472},{"name":8,"y":51140824},{"name":9,"y":40142790},{"name":10,"y":48054917},{"name":11,"y":44850246},{"name":12,"y":49684353}],"name":"2002","type":"line"},{"data":[{"name":1,"y":43815481},{"name":2,"y":45306597},{"name":3,"y":54147227},{"name":4,"y":53253194},{"name":5,"y":53030873},{"name":6,"y":56959142},{"name":7,"y":59614287},{"name":8,"y":57380873},{"name":9,"y":47671785},{"name":10,"y":54167489},{"name":11,"y":51781700},{"name":12,"y":52639838}],"name":"2004","type":"line"},{"data":[{"name":1,"y":48886043},{"name":2,"y":47348142},{"name":3,"y":58286011},{"name":4,"y":55828555},{"name":5,"y":57145193},{"name":6,"y":59297121},{"name":7,"y":60838606},{"name":8,"y":58303233},{"name":9,"y":49949551},{"name":10,"y":55088983},{"name":11,"y":53852209},{"name":12,"y":53538970}],"name":"2006","type":"line"},{"data":[{"name":1,"y":49727583},{"name":2,"y":47164464},{"name":3,"y":59556586},{"name":4,"y":57697344},{"name":5,"y":60251473},{"name":6,"y":61810705},{"name":7,"y":65128528},{"name":8,"y":62770180},{"name":9,"y":55989104},{"name":10,"y":60902787},{"name":11,"y":57150501},{"name":12,"y":57870281}],"name":"2015","type":"line"}],"tooltip":{"pointFormat":"{point.y} passengers"},"xAxis":{"categories":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},"legend":{"enabled":true}},"theme":{"colors":["#2b908f","#90ee7e","#f45b5b","#7798BF","#aaeeee","#ff0066","#eeaaee","#55BF3B","#DF5353","#7798BF","#aaeeee"],"chart":{"backgroundColor":{"linearGradient":{"x1":0,"y1":0,"x2":1,"y2":1},"stops":[[0,"#2a2a2b"],[1,"#3e3e40"]]},"style":{"fontFamily":"Unica One, sans-serif"},"plotBorderColor":"#606063"},"title":{"style":{"color":"#E0E0E3","textTransform":"uppercase","fontSize":"20px"}},"subtitle":{"style":{"color":"#E0E0E3","textTransform":"uppercase"}},"xAxis":{"gridLineColor":"#707073","labels":{"style":{"color":"#E0E0E3"}},"lineColor":"#707073","minorGridLineColor":"#505053","tickColor":"#707073","title":{"style":{"color":"#A0A0A3"}}},"yAxis":{"gridLineColor":"#707073","labels":{"style":{"color":"#E0E0E3"}},"lineColor":"#707073","minorGridLineColor":"#505053","tickColor":"#707073","tickWidth":1,"title":{"style":{"color":"#A0A0A3"}}},"tooltip":{"backgroundColor":"rgba(0, 0, 0, 0.85)","style":{"color":"#F0F0F0"}},"plotOptions":{"series":{"dataLabels":{"color":"#B0B0B3"},"marker":{"lineColor":"#333"}},"boxplot":{"fillColor":"#505053"},"candlestick":{"lineColor":"white"},"errorbar":{"color":"white"}},"legend":{"itemStyle":{"color":"#E0E0E3"},"itemHoverStyle":{"color":"#FFF"},"itemHiddenStyle":{"color":"#606063"}},"credits":{"style":{"color":"#666"}},"labels":{"style":{"color":"#707073"}},"drilldown":{"activeAxisLabelStyle":{"color":"#F0F0F3"},"activeDataLabelStyle":{"color":"#F0F0F3"}},"navigation":{"buttonOptions":{"symbolStroke":"#DDDDDD","theme":{"fill":"#505053"}}},"rangeSelector":{"buttonTheme":{"fill":"#505053","stroke":"#000000","style":{"color":"#CCC"},"states":{"hover":{"fill":"#707073","stroke":"#000000","style":{"color":"white"}},"select":{"fill":"#000003","stroke":"#000000","style":{"color":"white"}}}},"inputBoxBorderColor":"#505053","inputStyle":{"backgroundColor":"#333","color":"silver"},"labelStyle":{"color":"silver"}},"navigator":{"handles":{"backgroundColor":"#666","borderColor":"#AAA"},"outlineColor":"#CCC","maskFill":"rgba(255,255,255,0.1)","series":{"color":"#7798BF","lineColor":"#A6C7ED"},"xAxis":{"gridLineColor":"#505053"}},"scrollbar":{"barBackgroundColor":"#808083","barBorderColor":"#808083","buttonArrowColor":"#CCC","buttonBackgroundColor":"#606063","buttonBorderColor":"#606063","rifleColor":"#FFF","trackBackgroundColor":"#404043","trackBorderColor":"#404043"},"legendBackgroundColor":"rgba(0, 0, 0, 0.5)","background2":"#505053","dataLabelsColor":"#B0B0B3","textColor":"#C0C0C0","contrastTextColor":"#F0F0F3","maskColor":"rgba(255,255,255,0.3)"},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":"Unica+One","debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="unique-routes-over-time" class="section level1">
+<h1>Unique Routes over time</h1>
+<p>Line plot showing the number of unique routes for each year</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">unique_flights &lt;-<span class="kw">dcast</span>(<span class="dt">data =</span> total_flights, YEAR ~<span class="st"> </span>ORIGIN +<span class="st"> </span>DEST, <span class="dt">value.var =</span> <span class="st">&quot;PASSENGERS&quot;</span>, <span class="dt">fun.aggregate =</span> sum)
+<span class="kw">rm</span>(total_flights)
+unique_flights[unique_flights!=<span class="dv">0</span>]&lt;-<span class="dv">1</span> <span class="co">#Slow....</span>
+
+ROUTES &lt;-<span class="kw">rowSums</span>(unique_flights) -<span class="dv">1</span>
+
+<span class="kw">highchart</span>() %&gt;%
+<span class="st">  </span><span class="kw">hc_title</span>(<span class="dt">text =</span> <span class="st">&quot;Unique Flight Routes Over Time&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_subtitle</span>(<span class="dt">text =</span> <span class="st">&quot;Source: BTS.gov&quot;</span>) %&gt;%
+<span class="st">  </span><span class="co">#hc_tooltip(valueDecimals=2) %&gt;%</span>
+<span class="st">  </span><span class="kw">hc_add_series</span>(<span class="dt">data=</span>ROUTES, 
+                              <span class="dt">type=</span><span class="st">&quot;line&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_tooltip</span>(<span class="dt">pointFormat =</span> <span class="st">&quot;{point.y} unique routes&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">hc_xAxis</span>(<span class="dt">categories =</span> <span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">1995</span>:<span class="dv">2015</span>))) %&gt;%
+<span class="st">  </span><span class="kw">hc_legend</span>(<span class="dt">enabled=</span>F) %&gt;%
+<span class="st">  </span><span class="kw">hc_add_theme</span>(<span class="kw">hc_theme_darkunica</span>())</code></pre></div>
+<div id="htmlwidget-8695" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8695">{"x":{"hc_opts":{"title":{"text":"Unique Flight Routes Over Time"},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0}},"subtitle":{"text":"Source: BTS.gov"},"series":[{"data":[12379,11857,11497,11364,11514,11734,11347,13618,14608,15303,16314,15866,17033,15885,15508,16298,15829,14692,14512,14774,14150],"type":"line"}],"tooltip":{"pointFormat":"{point.y} unique routes"},"xAxis":{"categories":["1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015"]},"legend":{"enabled":false}},"theme":{"colors":["#2b908f","#90ee7e","#f45b5b","#7798BF","#aaeeee","#ff0066","#eeaaee","#55BF3B","#DF5353","#7798BF","#aaeeee"],"chart":{"backgroundColor":{"linearGradient":{"x1":0,"y1":0,"x2":1,"y2":1},"stops":[[0,"#2a2a2b"],[1,"#3e3e40"]]},"style":{"fontFamily":"Unica One, sans-serif"},"plotBorderColor":"#606063"},"title":{"style":{"color":"#E0E0E3","textTransform":"uppercase","fontSize":"20px"}},"subtitle":{"style":{"color":"#E0E0E3","textTransform":"uppercase"}},"xAxis":{"gridLineColor":"#707073","labels":{"style":{"color":"#E0E0E3"}},"lineColor":"#707073","minorGridLineColor":"#505053","tickColor":"#707073","title":{"style":{"color":"#A0A0A3"}}},"yAxis":{"gridLineColor":"#707073","labels":{"style":{"color":"#E0E0E3"}},"lineColor":"#707073","minorGridLineColor":"#505053","tickColor":"#707073","tickWidth":1,"title":{"style":{"color":"#A0A0A3"}}},"tooltip":{"backgroundColor":"rgba(0, 0, 0, 0.85)","style":{"color":"#F0F0F0"}},"plotOptions":{"series":{"dataLabels":{"color":"#B0B0B3"},"marker":{"lineColor":"#333"}},"boxplot":{"fillColor":"#505053"},"candlestick":{"lineColor":"white"},"errorbar":{"color":"white"}},"legend":{"itemStyle":{"color":"#E0E0E3"},"itemHoverStyle":{"color":"#FFF"},"itemHiddenStyle":{"color":"#606063"}},"credits":{"style":{"color":"#666"}},"labels":{"style":{"color":"#707073"}},"drilldown":{"activeAxisLabelStyle":{"color":"#F0F0F3"},"activeDataLabelStyle":{"color":"#F0F0F3"}},"navigation":{"buttonOptions":{"symbolStroke":"#DDDDDD","theme":{"fill":"#505053"}}},"rangeSelector":{"buttonTheme":{"fill":"#505053","stroke":"#000000","style":{"color":"#CCC"},"states":{"hover":{"fill":"#707073","stroke":"#000000","style":{"color":"white"}},"select":{"fill":"#000003","stroke":"#000000","style":{"color":"white"}}}},"inputBoxBorderColor":"#505053","inputStyle":{"backgroundColor":"#333","color":"silver"},"labelStyle":{"color":"silver"}},"navigator":{"handles":{"backgroundColor":"#666","borderColor":"#AAA"},"outlineColor":"#CCC","maskFill":"rgba(255,255,255,0.1)","series":{"color":"#7798BF","lineColor":"#A6C7ED"},"xAxis":{"gridLineColor":"#505053"}},"scrollbar":{"barBackgroundColor":"#808083","barBorderColor":"#808083","buttonArrowColor":"#CCC","buttonBackgroundColor":"#606063","buttonBorderColor":"#606063","rifleColor":"#FFF","trackBackgroundColor":"#404043","trackBorderColor":"#404043"},"legendBackgroundColor":"rgba(0, 0, 0, 0.5)","background2":"#505053","dataLabelsColor":"#B0B0B3","textColor":"#C0C0C0","contrastTextColor":"#F0F0F3","maskColor":"rgba(255,255,255,0.3)"},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":"Unica+One","debug":false},"evals":[],"jsHooks":[]}</script>
+<div id="animation-of-unique-flight-routes-over-time" class="section level2">
+<h2>Animation of unique flight routes over time:</h2>
+<div class="figure">
+<img src="Flight_animation.gif" alt="" />
+
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
