@@ -1,0 +1,131 @@
+---
+title: "US Flight Data"
+output: 
+  html_document: 
+    theme: journal
+    highlight: tango
+---
+```{r setup, include=F}
+knitr::opts_chunk$set(cache=T)
+```
+_Data visualization of unique air routes across the US from 1995-2015_
+
+Inspired by the AirBNB visualization and [blog post](https://medium.com/airbnb-engineering/using-r-packages-and-education-to-scale-data-science-at-airbnb-906faa58e12d#.czt4te24n) by [Ricardo Bion](https://github.com/ricardo-bion/medium_visualization), I incorporated data from the TranStats website with some R code to create a similar visualization. I was also interested in seeing how much more connected US cities have become in the last 20 years by means of air travel. 
+
+Data Source: [TranStats, US Carriers Domestic Market, T-1000](http://www.transtats.bts.gov/Tables.asp?DB_ID=110&DB_Name=Air%20Carrier%20Statistics%20%28Form%2041%20Traffic%29-%20%20U.S.%20Carriers&DB_Short_Name=Air%20Carriers). Only service class "F" flights were included, defined as scheduled passenger/cargo service flights.
+_It's also cool to see the BTS using [Highcharts](http://www.highcharts.com/) for their [data viz](http://transtats.bts.gov/)_  
+
+  
+  I couldn't find an easy way to scrape the transtats data or read it directly from a url, so I ended up downloading a series of csv's (1 per year) to a local folder. With a simple naming scheme, these were easy to read into R within a loop:
+
+```{r, warning=F, message=F, echo=T}
+year <-c(as.character(1995:2015))
+
+for (i in 1:length(year)){
+  flights <-read.csv(paste("C:/users/tim/dropbox/bootstrap web design/Data Playground/Datasets/T1000 - Flights/4520972_T_T100D_MARKET_US_CARRIER_ONLY_",year[i], ".csv", sep=""),as.is=T)
+flights <-flights[which(flights$CLASS=="F"),]; flights<-flights[,1:6]
+if(i == 1){total_flights <- flights}else{
+  total_flights <- rbind(total_flights, flights)
+}}
+```
+
+<center><h1> Passengers Per Year </h1></center>
+Before attempting to recreate the map-route visualization, I made a few quick plots with the flight data to check out some general trends. The first thing I wanted to know was how air travel has increased over the last 20 years in terms of number of passengers.  
+This was my first time incorporating `Highcharts` using the `highcharter` package and I was very pleased with how simple it was to add new interactive graphics. As I expected, the total number of flight passengers has steadily increased over the last 20 years. Interestingly, there were two periods where air travel decreased from the preceding year...and they seem to line up with the two biggest hits to the economy in the same time period (2000, 2008).  
+  
+
+
+```{r, warning=F, message=F, echo=T}
+require(highcharter)
+require(reshape2)
+
+total_flights <-total_flights[which(total_flights$PASSENGERS!=0),]
+
+tf2 <- as.data.frame(t(dcast(data = total_flights, .~YEAR, value.var = "PASSENGERS", fun.aggregate = sum)))
+tf2$YEAR <-rownames(tf2); colnames(tf2) <-c("PASSENGERS", "YEAR"); tf2<-tf2[-1,]; rownames(tf2)<-NULL
+tf2$PASSENGERS <-as.numeric(as.character(tf2$PASSENGERS))
+
+highchart() %>%
+  hc_title(text = "Total Flight Passengers Over Time") %>%
+  hc_subtitle(text = "Source: BTS.gov") %>%
+  #hc_tooltip(valueDecimals=2) %>%
+  hc_add_series_labels_values(tf2$YEAR, tf2$PASSENGERS, 
+                              type="line") %>%
+  hc_tooltip(pointFormat = "{point.y} passengers") %>%
+  hc_xAxis(categories = tf2$YEAR) %>%
+  hc_legend(enabled=F) %>%
+  hc_add_theme(hc_theme_darkunica())
+
+```
+
+<center><h1> Monthly Air Travel </h1></center>
+
+The annual data was interesting, but we know that air travel is seasonal. Wouldn't it be interesting to know if the same trends in air travel occurred at different intervals across this 20 year period? By casting the monthly trips by year, I was able to plot a series of line graphs that 
+represent these annual trends.  
+
+I underestimated how much more significant summer vacations are to major airlines than winter holiday travel. It also seems like the best time to be on the lookout for discounted flights is early in January-February and again in late August-September.  
+  
+*(you can turn years on and off by clicking on the year in the legend)*
+```{r, warning=F, message=F, echo=T}
+total_flights$DATE <-as.factor(paste(total_flights$YEAR, "-", total_flights$MONTH, "-1",  sep=""))
+tf <-dcast(data = total_flights, MONTH ~ YEAR, value.var = "PASSENGERS", fun.aggregate = sum)
+
+highchart() %>%
+  hc_title(text = "Total Flight Passengers Over Time") %>%
+  hc_subtitle(text = "Source: BTS.gov") %>%
+  #hc_tooltip(valueDecimals=2) %>%
+  hc_add_series_labels_values(tf$MONTH,tf$`1995`, name = "1995",
+                              type="line") %>%
+  hc_add_series_labels_values(tf$MONTH,tf$`1998`, name = "1998",
+                              type="line") %>%
+  hc_add_series_labels_values(tf$MONTH,tf$`2000`, name = "2000",
+                              type="line") %>%
+  hc_add_series_labels_values(tf$MONTH,tf$`2002`, name = "2002",
+                              type="line") %>%
+  hc_add_series_labels_values(tf$MONTH,tf$`2004`, name = "2004",
+                              type="line") %>%
+  hc_add_series_labels_values(tf$MONTH,tf$`2006`, name = "2006",
+                              type="line") %>%
+   hc_add_series_labels_values(tf$MONTH,tf$`2015`, name = "2015",
+                              type="line") %>%
+  hc_tooltip(pointFormat = "{point.y} passengers") %>%
+  hc_xAxis(categories = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", 
+                          "Aug", "Sep", "Oct", "Nov", "Dec")) %>%
+  hc_legend(enabled=T) %>%
+  hc_add_theme(hc_theme_darkunica())
+
+```
+
+<center><h1> Unique Routes over time</h1></center>
+
+Lastly, I was curious to see if specific route combinations have changed with time. As the world continues to be increasingly connected, is this reflected in the addition of new flight routes? 
+
+Unlike the drop in air travel as a result of the 2000 recession, unique flight combinations grew by 120% in 1 year and continued to increase until somewhere around the financial crisis of 2008. What's really interesting, however, is the steady drop of unique flight routes over the last 5 years.  
+
+Of course, there are so may other factors that aren't captured in this dataset. For example, it would be really interesting to couple this data with census data to see how urban populations have grown or shifted.   
+
+
+```{r, warning=F, message=F, echo=T, cache.vars=F}
+unique_flights <-dcast(data = total_flights, YEAR ~ ORIGIN + DEST, value.var = "PASSENGERS", fun.aggregate = sum)
+rm(total_flights)
+unique_flights[unique_flights!=0]<-1 #Be patient...
+
+ROUTES <-rowSums(unique_flights) -1
+
+highchart() %>%
+  hc_title(text = "Unique Flight Routes Over Time") %>%
+  hc_subtitle(text = "Source: BTS.gov") %>%
+  #hc_tooltip(valueDecimals=2) %>%
+  hc_add_series(data=ROUTES, 
+                              type="line") %>%
+  hc_tooltip(pointFormat = "{point.y} unique routes") %>%
+  hc_xAxis(categories = c(as.character(1995:2015))) %>%
+  hc_legend(enabled=F) %>%
+  hc_add_theme(hc_theme_darkunica())
+
+```
+
+
+<center><h1> Animation of unique flight routes over time </h1></center>
+<center>![](https://raw.githubusercontent.com/timabram/USflights/gh-pages/Flight_animation.gif)  </center>  
+*description of code used to make this graphic soon to follow....*
